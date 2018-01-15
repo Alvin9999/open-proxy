@@ -1,0 +1,34 @@
+
+server {
+	listen 7100;
+
+	location / {
+		proxy_pass https://www.bannedbook.org;
+		proxy_set_header Host www.bannedbook.org;
+		proxy_set_header Referer https://www.bannedbook.org;
+		proxy_set_header User-Agent "Mozilla/5.0 Chrome/63.0.3239.132 Safari/537.36";		# provide desktop version only
+
+		proxy_ssl_server_name on;
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text;
+		sub_filter https://www.bannedbook.org http://local_server_ip:7100;
+		sub_filter www.bannedbook.org local_server_ip:7100;
+		sub_filter m1.ablwang.com local_server_ip:7101;
+		
+		## should replace with google proxy server 
+		sub_filter https://www.google.com http://local_server_ip:7100;
+	}
+}
+
+server {
+	listen 7101;
+
+	location / {
+		proxy_pass http://m1.ablwang.com;
+		proxy_set_header Host m1.ablwang.com;
+		proxy_set_header Referer http://m1.ablwang.com;
+	}
+}
+
