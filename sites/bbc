@@ -1,0 +1,18 @@
+server {
+	listen	9100;
+
+	location / {
+		proxy_pass http://www.bbc.com;
+		proxy_set_header Host www.bbc.com;
+		proxy_set_header Referer http://www.bbc.com;
+		proxy_set_header User-Agent $http_user_agent;
+
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter www.bbc.com local_server_ip:9100;
+	}
+}
+
+

@@ -12,9 +12,10 @@ server {
 		include headers.conf;
 
 		sub_filter_once off;
-		sub_filter_types text;
+		sub_filter_types text text/javascript text/css;
 		sub_filter https://zh.wikipedia.org http://local_server_ip:8100;
 		sub_filter https://zh.wikinews.org http://local_server_ip:8110;
+		sub_filter zh.wikipedia.org local_server_ip:8100;
 	}
 }
 
@@ -31,9 +32,10 @@ server {
 		include headers.conf;
 
 		sub_filter_once off;
-		sub_filter_types text;
+		sub_filter_types text text/javascript text/css;
 		sub_filter https://zh.wikipedia.org http://local_server_ip:8100;
 		sub_filter https://zh.wikinews.org http://local_server_ip:8110;
+		sub_filter zh.wikipedia.org local_server_ip:8100;
 	}
 }
 
