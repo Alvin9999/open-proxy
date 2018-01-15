@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# auth : gfw-breaker
 
 NGINX_VERSION=1.13.3 
 PCRE_VERSION=8.41 
@@ -7,7 +7,7 @@ ZLIB_VERSION=1.2.11
 NGX_CONF_DIR=/usr/local/nginx/conf
 
 ## install common tools
-yum install -y gcc wget vim gcc-c++ 
+yum install -y gcc wget vim gcc-c++ openssl-devel
 
 
 ## download
@@ -47,6 +47,11 @@ cd nginx-${NGINX_VERSION} && \
 	--with-http_v2_module  \
 	--with-pcre=../pcre-${PCRE_VERSION} \
 	--with-zlib=../zlib-${ZLIB_VERSION}
+if [ $? -eq 0 ]; then
+	echo "failed to compile nginx and modules, please check the installation log"
+	exit 1
+fi
+
 make -j4 && make install 
 cd ..
 
@@ -56,7 +61,7 @@ server_ip=$(ifconfig | grep "inet addr" | sed -n 1p | cut -d':' -f2 | cut -d' ' 
 for cfg in $(ls sites/*); do
 	sed -i "s/local_server_ip/$server_ip/g" $cfg
 	site=$(basename $cfg)
-	sed "/## sites/a\\\\t\\tinclude $site;" $cfg
+	sed -i "/## sites/a\\\\t\\tinclude $site;" nginx.conf
 done
 mv sites/* $NGX_CONF_DIR
 cp *.conf $NGX_CONF_DIR
@@ -64,5 +69,10 @@ cp *.conf $NGX_CONF_DIR
 chmod +x nginx && cp nginx /etc/init.d 
 chkconfig nginx on
 service nginx start
+
+
+## disable iptables temparorily for testing, should enable and add rules to it in production
+service iptables stop
+chkconfig iptables off
 
 
