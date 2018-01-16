@@ -31,7 +31,6 @@ server {
 		proxy_set_header Referer https://static01.nyt.com;
 
 		proxy_ssl_server_name on;
-
 		include headers.conf;
 	}
 }
