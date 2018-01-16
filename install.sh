@@ -20,7 +20,7 @@ ZLIB_VERSION=1.2.11
 NGX_CONF_DIR=/usr/local/nginx/conf
 
 ## install common tools
-yum install -y gcc wget vim gcc-c++ openssl-devel
+yum install -y gcc wget vim gcc-c++ openssl-devel bash-completion
 
 
 ## download

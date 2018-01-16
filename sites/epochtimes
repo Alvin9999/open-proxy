@@ -1,0 +1,49 @@
+
+server {
+	listen	80;
+	
+	if ($http_user_agent ~ "qihoobot|Baiduspider|Googlebot|-Google|YandexBot|^$" ) {
+		return 403; 
+	}
+
+	location / {
+		proxy_pass http://www.epochtimes.com;
+		proxy_set_header Host www.epochtimes.com;
+		proxy_set_header Referer http://www.epochtimes.com;
+		proxy_set_header User-Agent $http_user_agent;
+
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter https://ajax.googleapis.com http://local_server_ip;
+		sub_filter i.epochtimes.com local_server_ip;
+		sub_filter www.epochtimes.com local_server_ip;
+		sub_filter imgs.ntdtv.com local_server_ip:8001;
+		sub_filter media5.ntdtv.com local_server_ip:8002;
+		sub_filter inew3.ntdtv.com local_server_ip:8003;
+	}
+	
+	location /info/ {
+		root html;
+	}
+	
+	location /books/ {
+		root content;
+	}
+	
+	location /videos/ {
+		root content;
+	}
+	
+	location /ajax/ {
+		root html;
+	}	
+
+	error_page	 500 502 503 504  /50x.html;
+	
+	location = /50x.html {
+		root   html;
+	}
+}
+

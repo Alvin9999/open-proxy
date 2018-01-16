@@ -1,0 +1,78 @@
+
+server {
+	listen	8000;
+
+	if ($http_user_agent ~ "qihoobot|Baiduspider|Googlebot|-Google|YandexBot|^$" ) {
+		return 403;		
+	}
+
+	location / {
+		proxy_pass http://www.ntdtv.com;
+		proxy_set_header Host www.ntdtv.com;
+		proxy_set_header Referer http://www.ntdtv.com;
+		proxy_set_header User-Agent $http_user_agent;
+
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter www.ntdtv.com local_server_ip:8000;
+		sub_filter imgs.ntdtv.com local_server_ip:8001;
+		sub_filter media5.ntdtv.com local_server_ip:8002;
+		sub_filter inews3.ntdtv.com local_server_ip:8003;
+		sub_filter ssl.p.jwpcdn.com local_server_ip:8004;
+
+		## fail fast
+		sub_filter www.google-analytics.com local_server_ip:8000;
+		sub_filter ajax.googleapis.com local_server_ip:8000;
+		sub_filter www.googletagmanager.com local_server_ip:8000;
+		sub_filter connect.facebook.net local_server_ip:8000;
+		sub_filter static.chartbeat.net local_server_ip:8000;
+
+	}
+}
+
+
+server {
+	listen	8001;
+
+		location / {
+			proxy_pass http://imgs.ntdtv.com;
+			proxy_set_header Host imgs.ntdtv.com;
+			proxy_set_header Referer http://imgs.ntdtv.com;
+		}
+}
+
+server {
+	listen 8002;
+
+	location / {
+		proxy_pass http://media5.ntdtv.com;
+		proxy_set_header Host media5.ntdtv.com;
+		proxy_set_header Referer http://media5.ntdtv.com;
+	}
+}
+
+server {
+	listen 8003;
+
+	location / {
+		proxy_pass http://inews3.ntdtv.com;
+		proxy_set_header Host inews3.ntdtv.com;
+		proxy_set_header Referer http://inew3.ntdtv.com;
+	}
+}
+
+server {
+	listen 8004;
+
+	location / {
+		proxy_pass http://ssl.p.jwpcdn.com;
+		proxy_set_header Host ssl.p.jwpcdn.com;
+		proxy_set_header Referer http://www.ntdtv.com;
+		proxy_set_header User-Agent $http_user_agent;
+		include headers.conf;
+	}
+}
+
+
