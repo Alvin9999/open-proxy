@@ -11,7 +11,7 @@ if [ $# -eq 0 ]; then
 	targets=$sites
 fi
 echo "you are going to install proxy for following sites:" $targets
-sleep 2
+sleep 3
 
 
 NGINX_VERSION=1.13.3 
@@ -101,7 +101,7 @@ for s in $targets; do
 	org_url=$(get_field $s proxy_pass)
 	proxy_port=$(get_field $s listen)
 	echo -e "http://$server_ip:$proxy_port  \t->\t$org_url"
-done
+done | sort
 echo
 
 

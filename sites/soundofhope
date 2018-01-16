@@ -10,10 +10,10 @@ server {
 
 		sub_filter_once off;
 		sub_filter_types text; 
-		sub_filter www.soundofhope.org 45.77.79.68:8200;
-		sub_filter img.soundofhope.org 45.77.79.68:8201;
-		sub_filter media.soundofhope.org 45.77.79.68:8202;
-		sub_filter radio.soundofhope.org:8880 45.77.79.68:8203;
+		sub_filter www.soundofhope.org local_server_ip:8200;
+		sub_filter img.soundofhope.org local_server_ip:8201;
+		sub_filter media.soundofhope.org local_server_ip:8202;
+		sub_filter radio.soundofhope.org:8880 local_server_ip:8203;
 	}
 }
 
