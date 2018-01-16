@@ -1,0 +1,62 @@
+
+server {
+	listen 9300;
+
+	if ($http_user_agent ~ "qihoobot|Baiduspider|Googlebot-|-Google|Feedfetcher-Google|YandexBot|^$" ) {
+		return 403;
+	}
+
+	location / {
+		proxy_pass http://cn.wsj.com;
+		proxy_set_header Host cn.wsj.com;
+		proxy_set_header Referer http://cn.wsj.com;
+		proxy_set_header User-Agent $http_user_agent;
+
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text text/javascript;
+		sub_filter cn.wsj.com local_server_ip:9300;
+		sub_filter s.wsj.net local_server_ip:9301;
+		sub_filter m.wsj.net local_server_ip:9302;
+		sub_filter si.wsj.net local_server_ip:9303;
+
+		## fail 
+		sub_filter video-api.wsj.com local_server_ip:9300;
+		sub_filter vpi.wsj.net local_server_ip:9300;
+		sub_filter www.wsj.com local_server_ip:9300; 
+		sub_filter tech.js notexist.js;
+	}
+}
+
+server {
+	listen	9301;
+
+	location / {
+		proxy_pass http://s.wsj.net;
+		proxy_set_header Host s.wsj.net;
+		proxy_set_header Referer http://s.wsj.com;
+	}
+}
+
+server {
+	listen	9302;
+
+	location / {
+		proxy_pass http://m.wsj.net;
+		proxy_set_header Host m.wsj.net;
+		proxy_set_header Referer http://m.wsj.com;
+	}
+}
+
+server {
+	listen	9303;
+
+	location / {
+		proxy_pass http://si.wsj.net;
+		proxy_set_header Host si.wsj.net;
+		proxy_set_header Referer http://si.wsj.com;
+	}
+}
+
+

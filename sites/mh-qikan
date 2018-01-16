@@ -1,0 +1,107 @@
+
+server {
+	listen	8300;
+
+	location / {
+		proxy_pass http://qikan.minghui.org;
+		proxy_set_header Host qikan.minghui.org;
+		proxy_set_header Referer http://qikan.minghui.org;
+		
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter qikan.minghui.org local_server_ip:8300;
+		sub_filter package.minghui.org local_server_ip:8301;
+		sub_filter pkg2.minghui.org local_server_ip:8302;
+		sub_filter www.minghui.org local_server_ip:8303;
+		sub_filter library.minghui.org local_server_ip:8304;
+		sub_filter media.minghui.org local_server_ip:8305;
+	}
+
+}
+
+server {
+	listen	8301;
+
+	location / {
+		proxy_pass http://package.minghui.org;
+		proxy_set_header Host package.minghui.org;
+		proxy_set_header Referer http://package.minghui.org;
+	}	
+}
+
+server {
+	listen	8302;
+
+	location / {
+		proxy_pass http://pkg2.minghui.org;
+		proxy_set_header Host pkg2.minghui.org;
+		proxy_set_header Referer http://pkg2.minghui.org;
+	}	
+}
+
+server {
+	listen	8303;
+
+	location / {
+		proxy_pass http://www.minghui.org;
+		proxy_set_header Host www.minghui.org;
+		proxy_set_header Referer http://www.minghui.org;
+		
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter qikan.minghui.org local_server_ip:8300;
+		sub_filter package.minghui.org local_server_ip:8301;
+		sub_filter pkg2.minghui.org local_server_ip:8302;
+		sub_filter www.minghui.org local_server_ip:8303;
+		sub_filter library.minghui.org local_server_ip:8304;
+		sub_filter media.minghui.org local_server_ip:8305;
+	}	
+}
+
+server {
+	listen	8304;
+
+	location / {
+		proxy_pass http://library.minghui.org;
+		proxy_set_header Host library.minghui.org;
+		proxy_set_header Referer http://library.minghui.org;
+
+		include headers.conf;
+		
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter qikan.minghui.org local_server_ip:8300;
+		sub_filter package.minghui.org local_server_ip:8301;
+		sub_filter pkg2.minghui.org local_server_ip:8302;
+		sub_filter www.minghui.org local_server_ip:8303;
+		sub_filter library.minghui.org local_server_ip:8304;
+		sub_filter media.minghui.org local_server_ip:8305;
+	}	
+}
+
+server {
+	listen	8305;
+
+	location / {
+		proxy_pass http://media.minghui.org;
+		proxy_set_header Host media.minghui.org;
+		proxy_set_header Referer http://media.minghui.org;
+
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter qikan.minghui.org local_server_ip:8300;
+		sub_filter package.minghui.org local_server_ip:8301;
+		sub_filter pkg2.minghui.org local_server_ip:8302;
+		sub_filter www.minghui.org local_server_ip:8303;
+		sub_filter library.minghui.org local_server_ip:8304;
+		sub_filter media.minghui.org local_server_ip:8305;
+	}	
+}
+
+

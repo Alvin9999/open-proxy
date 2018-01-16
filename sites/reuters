@@ -13,7 +13,7 @@ server {
 		proxy_set_header User-Agent "Chrome/63.0.3239.108 Safari/537.36";
 		
 		sub_filter_once off;
-		sub_filter_types text application/x-javascript application/javascript; 
+		sub_filter_types text application/javascript; 
 		sub_filter cn.reuters.com local_server_ip:9500;
 		sub_filter www.reuters.com local_server_ip:9550;
 		sub_filter static.reuters.com local_server_ip:9501;
@@ -39,7 +39,7 @@ server {
 		proxy_set_header User-Agent "Chrome/63.0.3239.108 Safari/537.36";
 		
 		sub_filter_once off;
-		sub_filter_types text application/x-javascript application/javascript; 
+		sub_filter_types text application/javascript; 
 		sub_filter cn.reuters.com local_server_ip:9500;
 		sub_filter www.reuters.com local_server_ip:9550;
 		sub_filter static.reuters.com local_server_ip:9501;
@@ -53,6 +53,10 @@ server {
 		proxy_pass http://static.reuters.com;
 		proxy_set_header Host static.reuters.com;
 		proxy_set_header Referer http://static.reuters.com;
+
+		sub_filter_once off;
+		sub_filter_types text text/css application/javascript; 
+		sub_filter static.reuters.com local_server_ip:9501;
 	}
 }
 

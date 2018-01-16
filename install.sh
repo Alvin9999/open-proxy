@@ -1,13 +1,26 @@
 #!/bin/bash
 # auth : gfw-breaker
 
+sites=$(echo $(ls sites) | sed 's/\\n/ /')
+for s in $*; do
+    if [[ " $sites " =~ " $s " ]]; then
+		targets="$s $targets"
+	fi
+done
+if [ $# -eq 0 ]; then
+	targets=$sites
+fi
+echo "you are going to install proxy for following sites:" $targets
+sleep 3
+
+
 NGINX_VERSION=1.13.3 
 PCRE_VERSION=8.41 
 ZLIB_VERSION=1.2.11
 NGX_CONF_DIR=/usr/local/nginx/conf
 
 ## install common tools
-yum install -y gcc wget vim gcc-c++ openssl-devel
+yum install -y gcc wget vim gcc-c++ openssl-devel bash-completion
 
 
 ## download
@@ -58,21 +71,38 @@ cd ..
 
 ## configure
 server_ip=$(ifconfig | grep "inet addr" | sed -n 1p | cut -d':' -f2 | cut -d' ' -f1)
-for cfg in $(ls sites/*); do
-	sed -i "s/local_server_ip/$server_ip/g" $cfg
-	site=$(basename $cfg)
-	sed -i "/## sites/a\\\\tinclude $site;" nginx.conf
+for site in $targets; do
+	sed -i "s/local_server_ip/$server_ip/g" sites/$site
+	sed -i "/## sites/a\\\\tinclude $site;" common/nginx.conf
+	cp sites/$site $NGX_CONF_DIR
 done
-mv sites/* $NGX_CONF_DIR
-cp *.conf $NGX_CONF_DIR
+cp common/*.conf $NGX_CONF_DIR
 
-chmod +x nginx && cp nginx /etc/init.d 
+chmod +x common/nginx && cp common/nginx /etc/init.d 
 chkconfig nginx on
-service nginx start
+service nginx restart
 
 
 ## disable iptables temparorily for testing, should enable and add rules to it in production
 service iptables stop
 chkconfig iptables off
+
+
+## print proxy information
+function get_field(){
+	local site="$1"
+	local key="$2"
+	local value=$(grep $key sites/$site | sed -n 1p | awk '{print $2}' | sed 's/;//')
+	echo $value
+}
+
+echo -e "\nProxy information:\n" 
+for s in $targets; do
+	org_url=$(get_field $s proxy_pass)
+	proxy_port=$(get_field $s listen)
+	echo -e "http://$server_ip:$proxy_port  \t->\t$org_url"
+done | sort
+echo
+
 
 
