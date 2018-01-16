@@ -3,7 +3,7 @@
 
 sites=$(ls sites)
 for s in $*; do
-	if [[ "$sites" =~ "$s" ]]; then
+	if [[ " "$sites" " =~ " $s " ]]; then
 		targets="$s $targets"
 	fi
 done
@@ -96,7 +96,7 @@ function get_field(){
 	echo $value
 }
 
-echo -e "\n\nProxy information:\n" 
+echo -e "\nProxy information:\n" 
 for s in $targets; do
 	org_url=$(get_field $s proxy_pass)
 	proxy_port=$(get_field $s listen)
