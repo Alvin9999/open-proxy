@@ -1,9 +1,9 @@
 #!/bin/bash
 # auth : gfw-breaker
 
-sites=$(ls sites)
+sites=$(echo $(ls sites) | sed 's/\\n/ /')
 for s in $*; do
-	if [[ " "$sites" " =~ " $s " ]]; then
+    if [[ " $sites " =~ " $s " ]]; then
 		targets="$s $targets"
 	fi
 done
