@@ -71,9 +71,8 @@ cd ..
 
 ## configure
 server_ip=$(ifconfig | grep "inet addr" | sed -n 1p | cut -d':' -f2 | cut -d' ' -f1)
-for cfg in $targets; do
-	sed -i "s/local_server_ip/$server_ip/g" $cfg
-	site=$(basename $cfg)
+for site in $targets; do
+	sed -i "s/local_server_ip/$server_ip/g" sites/$site
 	sed -i "/## sites/a\\\\tinclude $site;" nginx.conf
 	cp sites/$site $NGX_CONF_DIR
 done
@@ -97,11 +96,13 @@ function get_field(){
 	echo $value
 }
 
-echo -e "Proxy information:\n" 
+echo -e "\n\nProxy information:\n" 
 for s in $targets; do
 	org_url=$(get_field $s proxy_pass)
 	proxy_port=$(get_field $s listen)
 	echo -e "http://$server_ip:$proxy_port\t->\t$org_url"
 done
+echo
+
 
 
