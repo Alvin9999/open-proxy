@@ -14,9 +14,11 @@ server {
 		sub_filter_types text; 
 		sub_filter http://commons.dw.com local_server_ip:9201;
 		sub_filter https://commons.dw.com local_server_ip:9201;
-		sub_filter www.google.com localhost;
 		sub_filter www.dw.com local_server_ip:9200;
 		sub_filter m.dw.com local_server_ip:9220;
+	
+		# fail
+		sub_filter www.google.com local_server_ip:9200;
 	}
 }
 
@@ -38,7 +40,7 @@ server {
 		sub_filter m.dw.com local_server_ip:9220;
 	
 		# fail
-		sub_filter www.google.com local_server_ip:9200;localhost;
+		sub_filter www.google.com local_server_ip:9200;
 	}
 }
 
