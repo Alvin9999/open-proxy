@@ -100,7 +100,7 @@ echo -e "\nProxy information:\n"
 for s in $targets; do
 	org_url=$(get_field $s proxy_pass)
 	proxy_port=$(get_field $s listen)
-	echo -e "http://$server_ip:$proxy_port\t->\t$org_url"
+	echo -e "http://$server_ip:$proxy_port  \t->\t$org_url"
 done
 echo
 

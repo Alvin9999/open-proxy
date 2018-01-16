@@ -1,0 +1,57 @@
+
+server {
+	listen	9200;
+
+	location / {
+		proxy_pass http://www.dw.com;
+		proxy_set_header Host www.dw.com;
+		proxy_set_header Referer http://www.dw.com;
+
+		proxy_set_header User-Agent "Mozilla/5.0 Chrome/63.0.3239.132 Safari/537.36";
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter http://commons.dw.com local_server_ip:9201;
+		sub_filter https://commons.dw.com local_server_ip:9201;
+		sub_filter www.google.com localhost;
+		sub_filter www.dw.com local_server_ip:9200;
+		sub_filter m.dw.com local_server_ip:9220;
+	}
+}
+
+server {
+	listen	9220;
+
+	location / {
+		proxy_pass http://m.dw.com;
+		proxy_set_header Host m.dw.com;
+		proxy_set_header Referer http://m.dw.com;
+		proxy_set_header User-Agent $http_user_agent;
+		include headers.conf;
+
+		sub_filter_once off;
+		sub_filter_types text; 
+		sub_filter http://commons.dw.com local_server_ip:9201;
+		sub_filter https://commons.dw.com local_server_ip:9201;
+		sub_filter www.google.com localhost;
+		sub_filter m.dw.com local_server_ip:9220;
+	
+		# fail
+		sub_filter www.google.com local_server_ip:9200;localhost;
+	}
+}
+
+server {
+	listen	9201;
+
+	location / {
+		proxy_pass http://commons.dw.com;
+		proxy_set_header Host commons.dw.com;
+		proxy_set_header Referer http://commons.dw.com;
+		proxy_set_header User-Agent $http_user_agent;
+		include headers.conf;
+	}
+}
+
+
