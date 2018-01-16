@@ -80,7 +80,7 @@ cp *.conf $NGX_CONF_DIR
 
 chmod +x nginx && cp nginx /etc/init.d 
 chkconfig nginx on
-service nginx start
+service nginx restart
 
 
 ## disable iptables temparorily for testing, should enable and add rules to it in production
