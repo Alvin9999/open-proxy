@@ -16,12 +16,12 @@ server {
 
 		sub_filter_once off;
 		sub_filter_types text; 
-		sub_filter https://ajax.googleapis.com http://local_server_ip;
 		sub_filter i.epochtimes.com local_server_ip;
 		sub_filter www.epochtimes.com local_server_ip;
 		sub_filter imgs.ntdtv.com local_server_ip:8001;
 		sub_filter media5.ntdtv.com local_server_ip:8002;
 		sub_filter inew3.ntdtv.com local_server_ip:8003;
+		sub_filter https://ajax.googleapis.com http://local_server_ip:81;
 	}
 	
 	location /info/ {
@@ -44,6 +44,16 @@ server {
 	
 	location = /50x.html {
 		root   html;
+	}
+}
+
+server {
+	listen	81;
+	
+	location / {
+		proxy_pass https://ajax.googleapis.com;
+		proxy_set_header Host ajax.googleapis.com;
+		proxy_set_header Referer https://ajax.googleapis.com;
 	}
 }
 

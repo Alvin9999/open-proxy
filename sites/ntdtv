@@ -21,10 +21,11 @@ server {
 		sub_filter media5.ntdtv.com local_server_ip:8002;
 		sub_filter inews3.ntdtv.com local_server_ip:8003;
 		sub_filter ssl.p.jwpcdn.com local_server_ip:8004;
+		sub_filter ajax.googleapis.com local_server_ip:8005;
+		sub_filter stream.ntdtv.com local_server_ip:8006;
 
 		## fail fast
 		sub_filter www.google-analytics.com local_server_ip:8000;
-		sub_filter ajax.googleapis.com local_server_ip:8000;
 		sub_filter www.googletagmanager.com local_server_ip:8000;
 		sub_filter connect.facebook.net local_server_ip:8000;
 		sub_filter static.chartbeat.net local_server_ip:8000;
@@ -75,4 +76,23 @@ server {
 	}
 }
 
+server {
+	listen	8005;
+	
+	location / {
+		proxy_pass https://ajax.googleapis.com;
+		proxy_set_header Host ajax.googleapis.com;
+		proxy_set_header Referer https://ajax.googleapis.com;
+	}
+}
+
+server {
+	listen	8006;
+	
+	location / {
+		proxy_pass http://stream.ntdtv.com:8080;
+		proxy_set_header Host stream.ntdtv.com;
+		proxy_set_header Referer http://stream.ntdtv.com:8080;
+	}
+}
 
