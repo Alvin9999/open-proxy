@@ -73,12 +73,12 @@ cd ..
 server_ip=$(ifconfig | grep "inet addr" | sed -n 1p | cut -d':' -f2 | cut -d' ' -f1)
 for site in $targets; do
 	sed -i "s/local_server_ip/$server_ip/g" sites/$site
-	sed -i "/## sites/a\\\\tinclude $site;" nginx.conf
+	sed -i "/## sites/a\\\\tinclude $site;" common/nginx.conf
 	cp sites/$site $NGX_CONF_DIR
 done
-cp *.conf $NGX_CONF_DIR
+cp common/*.conf $NGX_CONF_DIR
 
-chmod +x nginx && cp nginx /etc/init.d 
+chmod +x common/nginx && cp common/nginx /etc/init.d 
 chkconfig nginx on
 service nginx restart
 
